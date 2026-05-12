@@ -1,8 +1,11 @@
 {
-  "name": "template",
-  "version": "0.0.1",
+  "name": "waline-vercel",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@waline/vercel": "1.39.3"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
