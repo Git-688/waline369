@@ -1,4 +1,18 @@
 {
+  "name": "comment",
+  "github": {
+    "silent": true
+  },
+  "builds": [
+    {
+      "src": "robots.txt",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "index.cjs",
+      "use": "@vercel/node"
+    }
+  ],
   "rewrites": [
     {
       "source": "/((?!robots\\.txt$).*)",
