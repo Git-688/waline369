@@ -1,5 +1,5 @@
 {
-  "name": "waline-tidb",
+  "name": "waline-tidb-v3",
   "version": 2,
   "builds": [
     {
