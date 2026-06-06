@@ -1,37 +1,33 @@
+// Waline V3 服务端入口，使用 MySQL 适配器连接 TiDB
 const { Application } = require('@waline/vercel');
-const MySQLStore = require('@waline/mysql');
+const { MySQLStore } = require('@waline/store');
 
-// 从环境变量读取 TiDB 连接信息
+// 从环境变量读取 TiDB 连接参数（兼容 V2 变量名）
 const dbOptions = {
-  host: process.env.TIDB_HOST,
-  port: parseInt(process.env.TIDB_PORT || '4000'),
-  user: process.env.TIDB_USER,
-  password: process.env.TIDB_PASSWORD,
-  database: process.env.TIDB_DB,
-  // TiDB Serverless 需要 SSL，建议添加以下配置
+  host: process.env.TIDB_HOST || process.env.MYSQL_HOST,
+  port: parseInt(process.env.TIDB_PORT || process.env.MYSQL_PORT || '4000'),
+  user: process.env.TIDB_USER || process.env.MYSQL_USER,
+  password: process.env.TIDB_PASSWORD || process.env.MYSQL_PASSWORD,
+  database: process.env.TIDB_DB || process.env.MYSQL_DB,
+  // TiDB Serverless 必须启用 SSL，设置 rejectUnauthorized: false
   ssl: process.env.TIDB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
   // 连接池配置（可选）
   connectionLimit: 10,
   waitForConnections: true,
   queueLimit: 0,
+  // 时区设置（中国时区）
+  timezone: '+08:00',
 };
 
-// 初始化 MySQL 存储实例
+// 初始化数据库存储实例
 const store = new MySQLStore(dbOptions);
 
-// 创建 Waline 应用
+// 创建 Waline 应用并导出（Vercel 函数）
 module.exports = Application({
-  // 数据库存储
-  store,
-  // 插件（可扩展）
-  plugins: [],
-  // 自定义异步钩子
-  async postSave(comment) {
-    // 保存后可做额外处理，例如发送 Webhook 或邮件通知
-    // 当前留空，可根据需要实现
-    console.log('[Waline] New comment saved:', comment.objectId);
+  store,                      // 必须：数据库存储
+  plugins: [],                // 可扩展插件列表
+  async postSave(comment) {   // 保存后的钩子（可选）
+    console.log(`[Waline] New comment saved: ${comment.objectId}`);
+    // 可在此添加 Webhook 通知、垃圾过滤等逻辑
   },
-  // 可选：自定义配置（部分配置也可通过环境变量覆盖）
-  // 但建议在 Vercel 环境变量中设置以下 Waline 支持的标准变量：
-  // SITE_NAME, SITE_URL, SERVER_URL, SMTP_*, AKISMET_KEY, IPQPS, SECURE_DOMAINS 等
 });
