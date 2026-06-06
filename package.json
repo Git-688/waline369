@@ -1,12 +1,8 @@
 {
-  "name": "waline-tidb-v3",
-  "version": "1.0.0",
+  "name": "template",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@waline/vercel": "^3.0.0",
-    "@waline/store": "^3.0.0"
-  },
-  "engines": {
-    "node": "18.x"
+    "@waline/vercel": "1.40.3"
   }
 }
