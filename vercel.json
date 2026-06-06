@@ -10,7 +10,10 @@
     },
     {
       "src": "index.cjs",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "runtime": "nodejs24.x"
+      }
     }
   ],
   "rewrites": [
