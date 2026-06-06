@@ -1,22 +1,16 @@
 {
-  "name": "comment",
-  "github": {
-    "silent": true
-  },
+  "name": "waline-tidb",
+  "version": 2,
   "builds": [
     {
-      "src": "robots.txt",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "index.cjs",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/((?!robots\\.txt$).*)",
-      "destination": "index.cjs"
+      "src": "/(.*)",
+      "dest": "api/index.js"
     }
   ]
 }
